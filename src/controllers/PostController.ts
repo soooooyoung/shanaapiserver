@@ -23,18 +23,18 @@ export class PostController extends BaseController {
   @HttpCode(200)
   @Get("/")
   public async getAllPosts(
-    @Res() res: Response,
-    @HeaderParams() header: BaseHeaderParam
+    @Res() res: Response
+    // @HeaderParams() header: BaseHeaderParam
     // TODO: @CookieParam("token") authToken: string
   ) {
     try {
-      const auth = await this.checkAuth((key) => header[key]);
-      if (false == auth) {
-        return res.status(401).json({
-          success: false,
-          error: "Unauthorized",
-        });
-      }
+      // const auth = await this.checkAuth((key) => header[key]);
+      // if (false == auth) {
+      //   return res.status(401).json({
+      //     success: false,
+      //     error: "Unauthorized",
+      //   });
+      // }
 
       let result = await this.postService.fetchAllPosts();
       return res.status(200).json({
