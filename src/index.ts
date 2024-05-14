@@ -1,5 +1,8 @@
 "use strict";
+import "reflect-metadata";
 import { ShanaServer } from "./server";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 async function start(): Promise<void> {
   const server = new ShanaServer();
