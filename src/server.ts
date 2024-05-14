@@ -4,7 +4,6 @@ import * as bodyParser from "body-parser";
 import { Container } from "typedi";
 import { useContainer, useExpressServer } from "routing-controllers";
 import { routingControllerOptions } from "./configs/RoutingConfig";
-import { APIKeyUtils } from "utils/security/APIKeyUtils";
 
 export class ShanaServer {
   public PORT: number = Number(process.env.PORT) || 9000;

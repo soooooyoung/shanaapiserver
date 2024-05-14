@@ -1,6 +1,6 @@
 import { env } from "../../configs/env";
 import { createHmac } from "crypto";
-import { IllegalStateException } from "../../models/exceptions";
+import { IllegalStateException } from "../../models";
 import { EncryptionUtils } from "./EncryptionUtils";
 
 export class APIKeyUtils {

@@ -1,10 +1,12 @@
 "use strict";
 import "reflect-metadata";
 import { ShanaServer } from "./server";
-import * as dotenv from "dotenv";
-dotenv.config();
+import * as MSSQLConnector from "./utils/database/DBConnector";
 
 async function start(): Promise<void> {
+  // DB Connection
+  MSSQLConnector.initPool();
+  // Server Start
   const server = new ShanaServer();
   await server.startServer();
 }

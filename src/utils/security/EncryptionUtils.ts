@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import { env } from "../../configs/env";
-import { IllegalStateException } from "../../models/exceptions";
+import { IllegalStateException } from "../../models";
 
 export class EncryptionUtils {
   private SECRETKEY = env.utils.ENCRYPT_KEY_SECRET || "";
