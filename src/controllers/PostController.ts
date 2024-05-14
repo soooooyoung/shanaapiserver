@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Service } from "typedi";
+import { Inject, Service } from "typedi";
 import {
   JsonController,
   HttpCode,
@@ -10,10 +10,13 @@ import {
 
 import { BaseController } from "./BaseController";
 import { BaseHeaderParam, Post as PostData } from "../models";
+import { PostService } from "../services/PostService";
 
 @Service()
 @JsonController("/post")
 export class PostController extends BaseController {
+  @Inject()
+  private postService: PostService = new PostService();
   /**
    * Get All Posts
    */
@@ -32,6 +35,12 @@ export class PostController extends BaseController {
           error: "Unauthorized",
         });
       }
+
+      let result = await this.postService.fetchAllPosts();
+      return res.status(200).json({
+        success: true,
+        result,
+      });
     } catch (e) {
       console.log(e);
       return res.status(400).json({

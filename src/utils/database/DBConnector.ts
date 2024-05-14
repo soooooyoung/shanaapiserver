@@ -9,8 +9,8 @@ export const initPool = async () => {
     Pool = await connect(DBConfig);
     console.log("Connection Pool generated successfully");
   } catch (e) {
-    throw new IllegalStateException("failed to initialized pool" + e);
+    throw new IllegalStateException("Failed to initialize pool. " + e);
   }
 };
 
-export const DB = () => Pool;
+export const DBConnectionPool = () => Pool;
