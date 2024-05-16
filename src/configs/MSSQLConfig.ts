@@ -1,7 +1,7 @@
 import { env } from "./env";
 import { config } from "mssql";
 
-export const DBConfig: config = {
+export const MSSQLConfig: config = {
   user: env.db.DB_USER,
   password: env.db.DB_PASSWORD,
   server: env.db.DB_HOST || "",

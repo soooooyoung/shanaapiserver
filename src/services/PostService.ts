@@ -1,16 +1,20 @@
 import { Service } from "typedi";
-import { IProcedureResult } from "mssql";
-import { DBConnectionPool } from "../utils/database/DBConnector";
+import { DBConnectionPool } from "../utils/database/MYSQLConnector";
 import { Post } from "../models";
 
 @Service()
 export class PostService {
-  public fetchAllPosts = async () => {
+  public fetchAllPosts = () => {
     try {
-      let result: IProcedureResult<Post[]> = await DBConnectionPool()
-        .request()
-        .execute("spPostList");
-      return result.recordset;
+      let result: Post[];
+
+      DBConnectionPool().query<Post[]>(
+        "Call spPostList()",
+        (queryErr, rows) => {
+          if (queryErr != null) throw queryErr;
+          result = rows;
+        }
+      );
     } catch (e) {
       throw e;
     }

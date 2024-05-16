@@ -1,14 +1,15 @@
 "use strict";
 import "reflect-metadata";
 import { ShanaServer } from "./server";
-import * as MSSQLConnector from "./utils/database/DBConnector";
+import * as MYSQLConnector from "./utils/database/MYSQLConnector";
 
 async function start(): Promise<void> {
-  // DB Connection
-  MSSQLConnector.initPool();
   // Server Start
   const server = new ShanaServer();
   await server.startServer();
+
+  // DB Connection
+  MYSQLConnector.initPool();
 }
 
 start().catch((err) => {

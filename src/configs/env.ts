@@ -1,4 +1,5 @@
 import * as dotenv from "dotenv";
+
 dotenv.config();
 
 export const env = {
@@ -13,11 +14,11 @@ export const env = {
     API_KEY_SECRET: process.env.API_KEY_SECRET,
   },
   db: {
-    DB_HOST: process.env.MSSQL_DB_HOST,
-    DB_USER: process.env.MSSQL_DB_USER,
-    DB_PASSWORD: process.env.MSSQL_DB_PASSWORD,
-    DB_PORT: Number(process.env.MSSQL_DB_PORT) || 9000,
-    DB_DATABASE: process.env.MSSQL_DB_DATABASE,
+    DB_HOST: process.env.DB_HOST,
+    DB_USER: process.env.DB_USER,
+    DB_PASSWORD: process.env.DB_PASSWORD,
+    DB_PORT: Number(process.env.DB_PORT) || 9000,
+    DB_DATABASE: process.env.DB_DATABASE,
   },
   email: {
     EMAIL_HOST: process.env.EMAIL_HOST,

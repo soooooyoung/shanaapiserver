@@ -1,16 +1,10 @@
 import { Response } from "express";
 import { Inject, Service } from "typedi";
-import {
-  JsonController,
-  HttpCode,
-  Get,
-  Res,
-  HeaderParams,
-} from "routing-controllers";
-
+import { JsonController, HttpCode, Get, Res } from "routing-controllers";
 import { BaseController } from "./BaseController";
-import { BaseHeaderParam, Post as PostData } from "../models";
 import { PostService } from "../services/PostService";
+import { DBConnectionPool } from "../utils/database/MYSQLConnector";
+import { Post } from "../models";
 
 @Service()
 @JsonController("/post")
@@ -36,11 +30,17 @@ export class PostController extends BaseController {
       //   });
       // }
 
-      let result = await this.postService.fetchAllPosts();
-      return res.status(200).json({
-        success: true,
-        result,
-      });
+      DBConnectionPool().query<Post[]>(
+        "Call spPostList()",
+        (queryErr, rows) => {
+          if (queryErr != null) throw queryErr;
+
+          return res.status(200).json({
+            success: true,
+            result: rows,
+          });
+        }
+      );
     } catch (e) {
       console.log(e);
       return res.status(400).json({

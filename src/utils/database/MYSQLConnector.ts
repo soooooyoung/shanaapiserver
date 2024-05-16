@@ -1,16 +1,17 @@
-import sql, { ConnectionPool, connect } from "mssql";
-import { DBConfig } from "../../configs/DBConfig";
+import mysql, { Pool } from "mysql2";
+import { MYSQLConfig } from "../../configs/MYSQLConfig";
 import { IllegalStateException } from "../../models";
 
-let Pool: ConnectionPool;
+let pool: Pool;
 
 export const initPool = async () => {
   try {
-    Pool = await connect(DBConfig);
+    pool = mysql.createPool(MYSQLConfig);
+
     console.log("Connection Pool generated successfully");
   } catch (e) {
     throw new IllegalStateException("Failed to initialize pool. " + e);
   }
 };
 
-export const DBConnectionPool = () => Pool;
+export const DBConnectionPool = () => pool;
