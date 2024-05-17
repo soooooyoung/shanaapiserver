@@ -1,12 +1,29 @@
-import { RowDataPacket } from "mysql2";
+import { FieldPacket, RowDataPacket } from "mysql2";
 import { DBConnectionPool } from "./MYSQLConnector";
 
-export const query = async <T extends RowDataPacket[]>(
-  query: string
-): Promise<T> =>
-  new Promise((resolve, reject) =>
-    DBConnectionPool().query<T>(query, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    })
-  );
+function executeQuery<T>(s: string): Promise<[T, FieldPacket[]]>;
+function executeQuery<T, ParamObject extends object>(
+  s: string,
+  p: ParamObject
+): Promise<[T, FieldPacket[]]>;
+
+async function executeQuery<
+  T extends RowDataPacket[],
+  ParamObject extends object
+>(queryString: string, params?: ParamObject): Promise<[T, FieldPacket[]]> {
+  let placeHolders = "";
+
+  if (params) {
+    placeHolders = Object.keys(params)
+      .map((k) => `:${k}`)
+      .join(", ");
+
+    return DBConnectionPool().execute<T>(
+      `${queryString}(${placeHolders})`,
+      params
+    );
+  }
+  return DBConnectionPool().execute<T>(`${queryString}()`);
+}
+
+export { executeQuery };

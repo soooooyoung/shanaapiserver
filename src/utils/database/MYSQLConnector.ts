@@ -1,4 +1,4 @@
-import { Pool, createPool } from "mysql2";
+import { Pool, createPool } from "mysql2/promise";
 import { MYSQLConfig } from "../../configs/DBConfig";
 import { IllegalStateException } from "../../models";
 

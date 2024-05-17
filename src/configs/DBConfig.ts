@@ -8,6 +8,7 @@ export const MYSQLConfig: PoolOptions = {
   host: env.db.DB_HOST,
   database: env.db.DB_DATABASE,
   port: env.db.DB_PORT,
+  namedPlaceholders: true,
 };
 
 export const MSSQLConfig: config = {

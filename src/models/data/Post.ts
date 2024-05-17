@@ -9,3 +9,7 @@ export interface Post extends RowDataPacket {
   CreatedDate?: string;
   UpdatedDate?: string;
 }
+
+export interface PostCreateResponse extends RowDataPacket {
+  PostID: number;
+}

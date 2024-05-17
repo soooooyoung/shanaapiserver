@@ -1,13 +1,25 @@
 import { Service } from "typedi";
-import { Post } from "../models";
-import { query } from "../utils/database/QueryUtil";
+import { Post, PostCreateResponse } from "../models";
+import { executeQuery } from "../utils/database/QueryUtil";
 
 @Service()
 export class PostService {
-  public fetchAllPosts = async () => {
+  public selectAllPosts = async () => {
     try {
-      let result: Post[] = await query<Post[]>("Call spPostList()");
+      let [result, fields] = await executeQuery<Post[]>("Call spPostList");
       return result;
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  public insertPost = async (data: Post) => {
+    try {
+      let [result, fields] = await executeQuery<Post[], Post>(
+        "Call spPostCreate",
+        data
+      );
+      return result[0];
     } catch (e) {
       throw e;
     }
