@@ -8,6 +8,9 @@ import {
   HeaderParams,
   Post,
   Body,
+  Param,
+  Put,
+  Delete,
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { PostService } from "../services/PostService";
@@ -56,7 +59,55 @@ export class PostController extends BaseController {
   public async createPost(@Res() res: Response, @Body() data: PostData) {
     try {
       const result = await this.postService.insertPost(data);
+      return res.status(200).json({
+        success: true,
+        result,
+      });
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({
+        success: false,
+        error: e,
+      });
+    }
+  }
 
+  @HttpCode(200)
+  @Put("/:postId")
+  public async updatePost(
+    @Res() res: Response,
+    @Param("postId") postId: number,
+    @Body() data: PostData
+  ) {
+    try {
+      if (postId !== data.PostID)
+        return res.status(400).json({
+          success: false,
+          error: "PostID does not match",
+        });
+
+      const result = await this.postService.updatePost(data);
+      return res.status(200).json({
+        success: true,
+        result,
+      });
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({
+        success: false,
+        error: e,
+      });
+    }
+  }
+
+  @HttpCode(200)
+  @Delete("/:postId")
+  public async deletePost(
+    @Res() res: Response,
+    @Param("postId") postId: number
+  ) {
+    try {
+      const result = await this.postService.deletePost(postId);
       return res.status(200).json({
         success: true,
         result,
@@ -70,3 +121,4 @@ export class PostController extends BaseController {
     }
   }
 }
+git a

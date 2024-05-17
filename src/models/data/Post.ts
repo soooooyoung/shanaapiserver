@@ -13,3 +13,6 @@ export interface Post extends RowDataPacket {
 export interface PostCreateResponse extends RowDataPacket {
   PostID: number;
 }
+export interface PostUpdateResponse extends RowDataPacket {
+  PostID: number;
+}

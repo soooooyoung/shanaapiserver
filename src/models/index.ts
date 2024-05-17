@@ -1,4 +1,4 @@
-export type { Post, PostCreateResponse } from "./data/Post";
+export type { Post, PostCreateResponse, PostUpdateResponse } from "./data/Post";
 
 export { BaseHeaderParam } from "./parameters/Headers";
 export {
