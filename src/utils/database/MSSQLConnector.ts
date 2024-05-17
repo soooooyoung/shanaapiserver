@@ -1,5 +1,6 @@
 import sql, { ConnectionPool, connect } from "mssql";
-import { MSSQLConfig } from "../../configs/MSSQLConfig";
+
+import { MSSQLConfig } from "../../configs/DBConfig";
 import { IllegalStateException } from "../../models";
 
 let Pool: ConnectionPool;
