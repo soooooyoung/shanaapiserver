@@ -1,8 +1,8 @@
 import { RowDataPacket } from "mysql2";
-
-export interface Post extends RowDataPacket {
-  PostID?: number;
+export interface Post {
   UserID?: number;
+  PostID?: number;
+  PostType?: number;
   Title?: string;
   TitleImage?: string;
   Content?: string;
@@ -10,9 +10,4 @@ export interface Post extends RowDataPacket {
   UpdatedDate?: string;
 }
 
-export interface PostCreateResponse extends RowDataPacket {
-  PostID: number;
-}
-export interface PostUpdateResponse extends RowDataPacket {
-  PostID: number;
-}
+export interface PostResponse extends Post, RowDataPacket {}

@@ -7,6 +7,7 @@ export const env = {
   isProduction: process.env.NODE_ENV === "production",
   app: {
     port: Number(process.env.PORT) || 9000,
+    serviceID: process.env.SERVICE_ID,
   },
   utils: {
     JWT_TOKEN_SECRET: process.env.JWT_TOKEN_SECRET,

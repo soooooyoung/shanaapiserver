@@ -1,7 +1,8 @@
 import { JsonController } from "routing-controllers";
 import { Service } from "typedi";
 import { APIKeyUtils } from "../utils/security/APIKeyUtils";
-import { BaseHeaderParam } from "models";
+import { BaseHeaderParam } from "../models";
+import { env } from "../configs/env";
 
 @Service()
 @JsonController()
@@ -12,8 +13,6 @@ export class BaseController {
     getKey: (keyName: keyof BaseHeaderParam) => string
   ) => {
     const key = this.apiKeyUtils.parseFromKey(getKey("apikey"));
-    // TODO: apikey verification
-
-    return true;
+    return key == env.app.serviceID;
   };
 }

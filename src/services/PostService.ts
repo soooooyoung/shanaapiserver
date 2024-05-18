@@ -1,5 +1,5 @@
 import { Service } from "typedi";
-import { Post, PostCreateResponse, PostUpdateResponse } from "../models";
+import { Post, PostResponse } from "../models";
 import { executeQuery } from "../utils/database/QueryUtil";
 
 @Service()
@@ -15,9 +15,15 @@ export class PostService {
 
   public insertPost = async (data: Post) => {
     try {
-      let [result, fields] = await executeQuery<PostCreateResponse[], Post>(
+      let [result, fields] = await executeQuery<PostResponse[], Post>(
         "Call spPostCreate",
-        data
+        {
+          PostType: data.PostType || 0,
+          UserID: data.UserID,
+          Title: data.Title,
+          TitleImage: data.TitleImage || "",
+          Content: data.Content,
+        }
       );
       return result[0];
     } catch (e) {
@@ -27,9 +33,15 @@ export class PostService {
 
   public updatePost = async (data: Post) => {
     try {
-      let [result, fields] = await executeQuery<PostUpdateResponse[], Post>(
+      let [result, fields] = await executeQuery<PostResponse[], Post>(
         "Call spPostUpdate",
-        data
+        {
+          PostID: data.PostID,
+          PostType: data.PostType || 0,
+          Title: data.Title,
+          TitleImage: data.TitleImage || "",
+          Content: data.Content,
+        }
       );
       return result[0];
     } catch (e) {
@@ -39,10 +51,12 @@ export class PostService {
 
   public deletePost = async (postID: number) => {
     try {
-      let [result, fields] = await executeQuery<
-        PostUpdateResponse[],
-        { postID: number }
-      >("Call spPostDelete", { postID });
+      let [result, fields] = await executeQuery<PostResponse[], Post>(
+        "Call spPostDelete",
+        {
+          PostID: postID,
+        }
+      );
       return result[0];
     } catch (e) {
       throw e;

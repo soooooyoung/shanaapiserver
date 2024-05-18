@@ -11,6 +11,7 @@ import {
   Param,
   Put,
   Delete,
+  CookieParam,
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { PostService } from "../services/PostService";
@@ -27,20 +28,18 @@ export class PostController extends BaseController {
   @HttpCode(200)
   @Get("/")
   public async getAllPosts(
-    @Res() res: Response
-    // @HeaderParams() header: BaseHeaderParam
-    // TODO: @CookieParam("token") authToken: string
+    @Res() res: Response,
+    @HeaderParams() header: BaseHeaderParam
   ) {
     try {
-      // const auth = await this.checkAuth((key) => header[key]);
-      // if (false == auth) {
-      //   return res.status(401).json({
-      //     success: false,
-      //     error: "Unauthorized",
-      //   });
-      // }
-      const result: PostData[] = await this.postService.selectAllPosts();
+      if (false == (await this.checkAuth((key) => header[key]))) {
+        return res.status(401).json({
+          success: false,
+          error: "Unauthorized",
+        });
+      }
 
+      const result: PostData[] = await this.postService.selectAllPosts();
       return res.status(200).json({
         success: true,
         result,
@@ -56,8 +55,20 @@ export class PostController extends BaseController {
 
   @HttpCode(200)
   @Post("/")
-  public async createPost(@Res() res: Response, @Body() data: PostData) {
+  public async createPost(
+    @Res() res: Response,
+    @HeaderParams() header: BaseHeaderParam,
+    @CookieParam("token") authToken: string,
+    @Body() data: PostData
+  ) {
     try {
+      if (false == (await this.checkAuth((key) => header[key]))) {
+        return res.status(401).json({
+          success: false,
+          error: "Unauthorized",
+        });
+      }
+
       const result = await this.postService.insertPost(data);
       return res.status(200).json({
         success: true,
@@ -76,10 +87,19 @@ export class PostController extends BaseController {
   @Put("/:postId")
   public async updatePost(
     @Res() res: Response,
+    @HeaderParams() header: BaseHeaderParam,
+    @CookieParam("token") authToken: string,
     @Param("postId") postId: number,
     @Body() data: PostData
   ) {
     try {
+      if (false == (await this.checkAuth((key) => header[key]))) {
+        return res.status(401).json({
+          success: false,
+          error: "Unauthorized",
+        });
+      }
+
       if (postId !== data.PostID)
         return res.status(400).json({
           success: false,
@@ -104,9 +124,18 @@ export class PostController extends BaseController {
   @Delete("/:postId")
   public async deletePost(
     @Res() res: Response,
+    @HeaderParams() header: BaseHeaderParam,
+    @CookieParam("token") authToken: string,
     @Param("postId") postId: number
   ) {
     try {
+      if (false == (await this.checkAuth((key) => header[key]))) {
+        return res.status(401).json({
+          success: false,
+          error: "Unauthorized",
+        });
+      }
+
       const result = await this.postService.deletePost(postId);
       return res.status(200).json({
         success: true,
