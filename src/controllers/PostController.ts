@@ -38,7 +38,7 @@ export class PostController extends BaseController {
         });
       }
 
-      const result: PostData[] = await this.postService.selectAllPosts();
+      const result = await this.postService.selectAllPosts();
       return res.status(200).json({
         success: true,
         result,

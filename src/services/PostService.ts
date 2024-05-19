@@ -6,8 +6,11 @@ import { executeQuery } from "../utils/database/QueryUtil";
 export class PostService {
   public selectAllPosts = async () => {
     try {
-      let [result, fields] = await executeQuery<Post[]>("Call spPostList");
-      return result;
+      let [result, fields] = await executeQuery<PostResponse[]>(
+        "Call spPostList"
+      );
+      console.log(result);
+      return result[0];
     } catch (e) {
       throw e;
     }
