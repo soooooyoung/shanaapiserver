@@ -26,3 +26,4 @@ yarn-error.log*
 .prettierrc
 Dockerfile
 TestController.ts
+/logs
