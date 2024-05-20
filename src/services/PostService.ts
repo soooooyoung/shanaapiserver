@@ -6,10 +6,8 @@ import { executeQuery } from "../utils/database/QueryUtil";
 export class PostService {
   public selectAllPosts = async () => {
     try {
-      let [result, fields] = await executeQuery<PostResponse[]>(
-        "Call spPostList"
-      );
-      console.log(result);
+      let [result, fields] = await executeQuery<PostResponse[]>("spPostList");
+
       return result[0];
     } catch (e) {
       throw e;
@@ -19,7 +17,7 @@ export class PostService {
   public insertPost = async (data: Post) => {
     try {
       let [result, fields] = await executeQuery<PostResponse[], Post>(
-        "Call spPostCreate",
+        "spPostCreate",
         {
           PostType: data.PostType || 0,
           UserID: data.UserID,
@@ -37,7 +35,7 @@ export class PostService {
   public updatePost = async (data: Post) => {
     try {
       let [result, fields] = await executeQuery<PostResponse[], Post>(
-        "Call spPostUpdate",
+        "spPostUpdate",
         {
           PostID: data.PostID,
           PostType: data.PostType || 0,
@@ -55,7 +53,7 @@ export class PostService {
   public deletePost = async (postID: number) => {
     try {
       let [result, fields] = await executeQuery<PostResponse[], Post>(
-        "Call spPostDelete",
+        "spPostDelete",
         {
           PostID: postID,
         }

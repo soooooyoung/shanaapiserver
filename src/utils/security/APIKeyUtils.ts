@@ -27,7 +27,6 @@ export class APIKeyUtils {
         }
       }
     } catch (e) {
-      console.log(e);
       throw new IllegalStateException("failed to create HMAC:" + e);
     }
   };
@@ -42,7 +41,6 @@ export class APIKeyUtils {
 
       return `${userHex}${this.SEPARATOR}${hash}`;
     } catch (e) {
-      console.log(e);
       throw new IllegalStateException("failed to create HMAC: " + e);
     }
   };

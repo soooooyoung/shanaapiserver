@@ -2,17 +2,17 @@ import { Response } from "express";
 import {
   JsonController,
   HttpCode,
-  Get,
   Res,
-  HeaderParams,
   Post,
   Body,
+  HeaderParam,
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
-import { BaseHeaderParam, LoginParam, AuthTokenJWT } from "../models";
+import { LoginParam, AuthTokenJWT } from "../models";
 import { TokenUtils } from "../utils/security/JWTTokenUtils";
 import { Service } from "typedi";
 import { env } from "../configs/env";
+import { logError } from "../utils/Logger";
 
 @Service()
 @JsonController("/signin")
@@ -25,11 +25,11 @@ export class SigninController extends BaseController {
   @Post("/")
   public async getAllPosts(
     @Res() res: Response,
-    @HeaderParams() header: BaseHeaderParam,
+    @HeaderParam("apikey") apikey: string,
     @Body() { AuthToken }: LoginParam
   ) {
     try {
-      if (await this.checkAuth((key) => header[key])) {
+      if (await this.checkAuth(apikey)) {
         if (AuthToken) {
           const payLoad = await this.tokenUtil.verifyToken<AuthTokenJWT>(
             AuthToken
@@ -53,7 +53,7 @@ export class SigninController extends BaseController {
         error: "Unauthorized",
       });
     } catch (e) {
-      console.log(e);
+      logError(e);
       return res.status(400).json({
         success: false,
         error: e,

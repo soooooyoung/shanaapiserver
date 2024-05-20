@@ -23,7 +23,7 @@ async function executeQuery<
       params
     );
   }
-  return DBConnectionPool().execute<T>(`${queryString}()`);
+  return DBConnectionPool().execute<T>(`Call ${queryString}()`);
 }
 
 export { executeQuery };

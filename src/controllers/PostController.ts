@@ -11,10 +11,14 @@ import {
   Put,
   Delete,
   CookieParam,
+  UseAfter,
+  UseBefore,
+  HeaderParam,
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { PostService } from "../services/PostService";
-import { BaseHeaderParam, Post as PostData } from "../models";
+import { PostCreateParam, PostDeleteParam, PostUpdateParam } from "../models";
+import { logError } from "../utils/Logger";
 
 @Service()
 @JsonController("/post")
@@ -27,11 +31,11 @@ export class PostController extends BaseController {
   @HttpCode(200)
   @Get("/")
   public async getAllPosts(
-    @Res() res: Response,
-    @HeaderParams() header: BaseHeaderParam
+    @HeaderParam("apikey") apikey: string,
+    @Res() res: Response
   ) {
     try {
-      if (false == (await this.checkAuth((key) => header[key]))) {
+      if (false == (await this.checkAuth(apikey))) {
         return res.status(401).json({
           success: false,
           error: "Unauthorized",
@@ -44,7 +48,7 @@ export class PostController extends BaseController {
         result,
       });
     } catch (e) {
-      console.log(e);
+      logError(e);
       return res.status(400).json({
         success: false,
         error: e,
@@ -56,14 +60,14 @@ export class PostController extends BaseController {
   @Post("/")
   public async createPost(
     @Res() res: Response,
-    @HeaderParams() header: BaseHeaderParam,
+    @HeaderParam("apikey") apikey: string,
     @CookieParam("token") authToken: string,
-    @Body() data: PostData
+    @Body() data: PostCreateParam
   ) {
     try {
       if (
         data.UserID &&
-        (await this.checkAuth((key) => header[key])) &&
+        (await this.checkAuth(apikey)) &&
         (await this.verifyToken(authToken, data.UserID))
       ) {
         const result = await this.postService.insertPost(data);
@@ -78,7 +82,7 @@ export class PostController extends BaseController {
         error: "Unauthorized",
       });
     } catch (e) {
-      console.log(e);
+      logError(e);
       return res.status(400).json({
         success: false,
         error: e,
@@ -90,15 +94,15 @@ export class PostController extends BaseController {
   @Put("/")
   public async updatePost(
     @Res() res: Response,
-    @HeaderParams() header: BaseHeaderParam,
+    @HeaderParam("apikey") apikey: string,
     @CookieParam("token") authToken: string,
-    @Body() data: PostData
+    @Body() data: PostUpdateParam
   ) {
     try {
       if (
         data.UserID &&
         data.PostID &&
-        (await this.checkAuth((key) => header[key])) &&
+        (await this.checkAuth(apikey)) &&
         (await this.verifyToken(authToken, data.UserID))
       ) {
         const result = await this.postService.updatePost(data);
@@ -113,7 +117,7 @@ export class PostController extends BaseController {
         error: "Unauthorized",
       });
     } catch (e) {
-      console.log(e);
+      logError(e);
       return res.status(400).json({
         success: false,
         error: e,
@@ -125,15 +129,15 @@ export class PostController extends BaseController {
   @Delete("/")
   public async deletePost(
     @Res() res: Response,
-    @HeaderParams() header: BaseHeaderParam,
+    @HeaderParam("apikey") apikey: string,
     @CookieParam("token") authToken: string,
-    @Body() data: PostData
+    @Body() data: PostDeleteParam
   ) {
     try {
       if (
         data.UserID &&
         data.PostID &&
-        (await this.checkAuth((key) => header[key])) &&
+        (await this.checkAuth(apikey)) &&
         (await this.verifyToken(authToken, data.UserID))
       ) {
         const result = await this.postService.deletePost(data.PostID);
@@ -142,8 +146,12 @@ export class PostController extends BaseController {
           result,
         });
       }
+      return res.status(401).json({
+        success: false,
+        error: "Unauthorized",
+      });
     } catch (e) {
-      console.log(e);
+      logError(e);
       return res.status(400).json({
         success: false,
         error: e,

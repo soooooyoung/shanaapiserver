@@ -2,6 +2,7 @@
 import "reflect-metadata";
 import * as MYSQLConnector from "./utils/database/MYSQLConnector";
 import { ShanaServer } from "./server";
+import { logError } from "./utils/Logger";
 
 async function start(): Promise<void> {
   // Server Start
@@ -12,6 +13,6 @@ async function start(): Promise<void> {
 }
 
 start().catch((err) => {
-  console.log(err);
+  logError(err);
   process.exit(-1);
 });

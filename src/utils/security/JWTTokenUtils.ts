@@ -22,14 +22,12 @@ export class TokenUtils {
       if (expiresIn) return jwt.sign(payload, secret, { expiresIn });
       return jwt.sign(payload, secret);
     } catch (e) {
-      console.log(e);
       throw new IllegalStateException("Unable to generate Token: " + e);
     }
   };
 
   public generateAuthToken = (user: User, expiresIn?: string | number) => {
     if (!user || !user.userId) {
-      console.log("NO USER IN GENERATE AUTH TOKEN");
       throw new NoResultException();
     }
     return this.doGenerateToken({ user }, this.SECRETKEY, expiresIn);
@@ -40,7 +38,6 @@ export class TokenUtils {
     expiresIn?: string | number
   ) => {
     if (!payload) {
-      console.log("NO PAYLOAD IN GENERATE TOKEN");
       throw new NoResultException();
     }
     return this.doGenerateToken(payload, this.SECRETKEY, expiresIn);
@@ -53,7 +50,6 @@ export class TokenUtils {
     try {
       return jwt.verify(token, this.SECRETKEY) as T;
     } catch (e) {
-      console.log(e);
       throw new InvalidKeyException("Invalid Token");
     }
   };
