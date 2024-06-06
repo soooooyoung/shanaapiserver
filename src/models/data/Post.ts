@@ -1,5 +1,5 @@
 import { IsDateString, IsNotEmpty, IsString, MaxLength } from "class-validator";
-import { RowDataPacket } from "mysql2";
+import { RowDataPacket } from "mysql2/promise";
 
 export interface PostResponse extends Post, RowDataPacket {}
 

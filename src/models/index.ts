@@ -5,7 +5,7 @@ export type {
   PostCreateParam,
   PostUpdateParam,
 } from "./data/Post";
-export type { User } from "./data/User";
+export type { User, UserCreateParam, UserResponse } from "./data/User";
 
 export type { LoginParam } from "./parameters/Requests";
 export type { JWTPayload, AuthTokenJWT } from "./parameters/JWT";
