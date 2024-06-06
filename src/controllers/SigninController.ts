@@ -23,7 +23,7 @@ export class SigninController extends BaseController {
    */
   @HttpCode(200)
   @Post("/")
-  public async getAllPosts(
+  public async signIn(
     @Res() res: Response,
     @HeaderParam("apikey") apikey: string,
     @Body() { AuthToken }: LoginParam
