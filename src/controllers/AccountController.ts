@@ -46,12 +46,11 @@ export class AccountController extends BaseController {
         }
 
         if (Username && Password) {
-          if (
-            await this.accountService.verifyUser({
-              Username,
-              Password,
-            })
-          ) {
+          const result = await this.accountService.verifyUser({
+            Username,
+            Password,
+          });
+          if (result) {
             const newToken = this.tokenUtil.generateAuthToken(Username, "7d");
             res.cookie("token", newToken, {
               secure: env.isProduction,

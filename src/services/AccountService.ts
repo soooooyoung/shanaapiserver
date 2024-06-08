@@ -50,15 +50,18 @@ export class AccountService {
 
   public verifyUser = async ({ Username, Password }: User) => {
     try {
-      let [result, fields] = await executeQuery<UserResponse[], User>(
-        "spUserVerify",
-        {
-          Username,
-          Password,
-        }
-      );
-
-      return result[0][0];
+      if (undefined == Password || undefined == Username) {
+        throw new ValidationException("Required Field Is Empty");
+      }
+      const [result, fields] = await executeQuery<
+        UserResponse,
+        { Username?: string }
+      >("SpUserPassword", {
+        Username,
+      });
+      const encrypted = result[0][0].EncryptedPassword;
+      if (this.encryptionUtil.decrypt(encrypted) == Password) return true;
+      return false;
     } catch (e) {
       throw e;
     }
