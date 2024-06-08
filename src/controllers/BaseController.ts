@@ -22,6 +22,6 @@ export class BaseController {
 
     const payload = await this.tokenUtils.verifyToken<AuthTokenJWT>(authToken);
 
-    return payload && payload.user && payload.user.userId == userID;
+    return payload && payload.userID == userID;
   };
 }

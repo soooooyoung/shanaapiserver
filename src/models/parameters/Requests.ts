@@ -1,6 +1,12 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class LoginParam {
-  @IsNotEmpty()
+  @IsString()
   public AuthToken?: string;
+
+  @IsString()
+  public Username?: string;
+
+  @IsString()
+  public Password?: string;
 }

@@ -44,4 +44,18 @@ export class APIKeyUtils {
       throw new IllegalStateException("failed to create HMAC: " + e);
     }
   };
+
+  create = (serviceId: string) => {
+    try {
+      const enc = new EncryptionUtils();
+      const userHex = enc.encrypt(serviceId);
+      const hash = createHmac(this.HMAC_ALGO, this.SECRETKEY)
+        .update(userHex)
+        .digest("hex");
+
+      return `${userHex}${this.SEPARATOR}${hash}`;
+    } catch (e) {
+      throw new IllegalStateException("failed to create HMAC: " + e);
+    }
+  };
 }

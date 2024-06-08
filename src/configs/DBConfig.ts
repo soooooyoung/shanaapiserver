@@ -1,5 +1,5 @@
 import { env } from "./env";
-import { PoolOptions } from "mysql2";
+import { PoolOptions } from "mysql2/promise";
 import { config } from "mssql";
 
 export const MYSQLConfig: PoolOptions = {

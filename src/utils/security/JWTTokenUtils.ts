@@ -26,11 +26,14 @@ export class TokenUtils {
     }
   };
 
-  public generateAuthToken = (user: User, expiresIn?: string | number) => {
-    if (!user || !user.userId) {
+  public generateAuthToken = (
+    Username?: string,
+    expiresIn?: string | number
+  ) => {
+    if (!Username) {
       throw new NoResultException();
     }
-    return this.doGenerateToken({ user }, this.SECRETKEY, expiresIn);
+    return this.doGenerateToken({ Username }, this.SECRETKEY, expiresIn);
   };
 
   public generateToken = (

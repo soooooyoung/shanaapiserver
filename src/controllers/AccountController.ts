@@ -6,6 +6,7 @@ import {
   Post,
   Body,
   HeaderParam,
+  CookieParam,
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { LoginParam, AuthTokenJWT } from "../models";
@@ -29,25 +30,39 @@ export class AccountController extends BaseController {
   public async signIn(
     @Res() res: Response,
     @HeaderParam("apikey") apikey: string,
-    @Body() { AuthToken }: LoginParam
+    @Body() { Username, Password }: LoginParam,
+    @CookieParam("token") authToken?: string
   ) {
     try {
       if (await this.checkAuth(apikey)) {
-        if (AuthToken) {
+        if (authToken) {
           const payLoad = await this.tokenUtil.verifyToken<AuthTokenJWT>(
-            AuthToken
+            authToken
           );
-
-          res.cookie("token", AuthToken, {
-            secure: env.isProduction,
-            httpOnly: true,
-            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          });
-
           return res.status(200).json({
             success: true,
-            result: payLoad.user,
+            result: payLoad.userID,
           });
+        }
+
+        if (Username && Password) {
+          if (
+            await this.accountService.verifyUser({
+              Username,
+              Password,
+            })
+          ) {
+            const newToken = this.tokenUtil.generateAuthToken(Username, "7d");
+            res.cookie("token", newToken, {
+              secure: env.isProduction,
+              httpOnly: true,
+              expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            });
+
+            return res.status(200).json({
+              success: true,
+            });
+          }
         }
       }
 
@@ -81,10 +96,10 @@ export class AccountController extends BaseController {
           error: "Unauthorized",
         });
       }
-
       const result = await this.accountService.insertUser(data);
-      return res.status(result?.success ? 200 : 401).json({
-        success: result?.success,
+      return res.status(200).json({
+        success: true,
+        result,
       });
     } catch (e) {
       logError(e);

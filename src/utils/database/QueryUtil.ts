@@ -1,4 +1,4 @@
-import { FieldPacket, RowDataPacket } from "mysql2";
+import { FieldPacket, RowDataPacket } from "mysql2/promise";
 import { DBConnectionPool } from "./MYSQLConnector";
 
 function executeQuery<T>(s: string): Promise<[T, FieldPacket[]]>;
@@ -17,12 +17,12 @@ async function executeQuery<
     placeHolders = Object.keys(params)
       .map((k) => `:${k}`)
       .join(", ");
-
     return DBConnectionPool().execute<T>(
-      `${queryString}(${placeHolders})`,
+      `Call ${queryString}(${placeHolders})`,
       params
     );
   }
+
   return DBConnectionPool().execute<T>(`Call ${queryString}()`);
 }
 

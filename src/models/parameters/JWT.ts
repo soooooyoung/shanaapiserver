@@ -6,5 +6,5 @@ export interface JWTPayload {
 }
 
 export interface AuthTokenJWT extends JWTPayload {
-  user: User;
+  userID: number;
 }
