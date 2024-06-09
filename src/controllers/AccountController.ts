@@ -51,9 +51,12 @@ export class AccountController extends BaseController {
             Password,
           });
           if (result) {
-            const newToken = this.tokenUtil.generateAuthToken(Username, "7d");
+            const newToken = await this.tokenUtil.generateAuthToken(
+              Username,
+              "7d"
+            );
             res.cookie("token", newToken, {
-              secure: env.isProduction,
+              secure: true,
               httpOnly: true,
               expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
             });
