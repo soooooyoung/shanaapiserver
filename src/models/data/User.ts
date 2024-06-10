@@ -8,9 +8,6 @@ export class User {
   @IsNotEmpty()
   @IsString()
   public Password?: string;
-
-  @IsString()
-  public EncryptedPassword?: string;
 }
 
 export interface UserResponse extends RowDataPacket {}

@@ -7,6 +7,7 @@ import {
   Body,
   HeaderParam,
   CookieParam,
+  Get,
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { LoginParam, AuthTokenJWT } from "../models";
@@ -102,6 +103,40 @@ export class AccountController extends BaseController {
       return res.status(200).json({
         success: true,
         result,
+      });
+    } catch (e) {
+      logError(e);
+      return res.status(400).json({
+        success: false,
+        error: e,
+      });
+    }
+  }
+
+  /**
+   * Sign In
+   */
+  @HttpCode(200)
+  @Get("/verify")
+  public async verify(
+    @Res() res: Response,
+    @HeaderParam("apikey") apikey: string,
+    @CookieParam("token") authToken: string
+  ) {
+    try {
+      if ((await this.checkAuth(apikey)) && authToken) {
+        const payLoad = await this.tokenUtil.verifyToken<AuthTokenJWT>(
+          authToken
+        );
+        return res.status(200).json({
+          success: true,
+          result: payLoad.userID,
+        });
+      }
+
+      return res.status(401).json({
+        success: false,
+        error: "Unauthorized",
       });
     } catch (e) {
       logError(e);

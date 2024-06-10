@@ -8,8 +8,8 @@ export const routingControllerOptions: RoutingControllersOptions = {
       process.env.BUILD_HOST,
       process.env.SERVER_HOST,
     ],
-    credentials: true,
-    exposedHeaders: ["Set-Cookie"],
+    // credentials: true,
+    // exposedHeaders: ["Set-Cookie"],
   },
   controllers: [`${__dirname}/../controllers/*{.ts,.js}`],
 };
