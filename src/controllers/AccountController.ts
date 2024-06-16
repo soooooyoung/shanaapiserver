@@ -114,7 +114,7 @@ export class AccountController extends BaseController {
   }
 
   /**
-   * Sign In
+   * Verify
    */
   @HttpCode(200)
   @Get("/verify")
@@ -124,10 +124,15 @@ export class AccountController extends BaseController {
     @CookieParam("token") authToken: string
   ) {
     try {
-      if ((await this.checkAuth(apikey)) && authToken) {
+      if (
+        (await this.checkAuth(apikey)) &&
+        authToken &&
+        (await this.tokenUtils.verifyToken<AuthTokenJWT>(authToken))
+      ) {
         const payLoad = await this.tokenUtil.verifyToken<AuthTokenJWT>(
           authToken
         );
+
         return res.status(200).json({
           success: true,
           result: payLoad.userID,

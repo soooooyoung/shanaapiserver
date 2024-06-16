@@ -26,7 +26,7 @@ export class PostService {
           Content: data.Content,
         }
       );
-      return result[0];
+      return result[0][0];
     } catch (e) {
       throw e;
     }
@@ -44,7 +44,7 @@ export class PostService {
           Content: data.Content,
         }
       );
-      return result[0];
+      return result[0][0];
     } catch (e) {
       throw e;
     }
@@ -58,7 +58,7 @@ export class PostService {
           PostID: postID,
         }
       );
-      return result[0];
+      return result[0][0];
     } catch (e) {
       throw e;
     }

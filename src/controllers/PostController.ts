@@ -17,7 +17,12 @@ import {
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { PostService } from "../services/PostService";
-import { PostCreateParam, PostDeleteParam, PostUpdateParam } from "../models";
+import {
+  AuthTokenJWT,
+  PostCreateParam,
+  PostDeleteParam,
+  PostUpdateParam,
+} from "../models";
 import { logError } from "../utils/Logger";
 
 @Service()
@@ -68,7 +73,7 @@ export class PostController extends BaseController {
       if (
         data.UserID &&
         (await this.checkAuth(apikey)) &&
-        (await this.verifyToken(authToken, data.UserID))
+        (await this.tokenUtils.verifyToken<AuthTokenJWT>(authToken))
       ) {
         const result = await this.postService.insertPost(data);
         return res.status(200).json({
