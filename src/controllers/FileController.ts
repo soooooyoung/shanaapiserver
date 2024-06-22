@@ -1,4 +1,4 @@
-import JSZip from "jszip";
+import { loadAsync } from "jszip";
 import * as multer from "multer";
 import { Response } from "express";
 import { Inject, Service } from "typedi";
@@ -15,46 +15,71 @@ import {
   HeaderParam,
   UploadedFile,
   UploadOptions,
+  Param,
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { FileService } from "../services/FileService";
 import { AuthTokenJWT, FileData } from "../models";
 import { logError } from "../utils/Logger";
+import { InputType, file, generateAsync } from "jszip";
 @Service()
 @JsonController("/file")
 export class FileController extends BaseController {
   @Inject()
   private fileService: FileService = new FileService();
+
+  private async compressBase64Data(data: string): Promise<ArrayBuffer> {
+    file<InputType>("data.txt", data || "");
+    const zipBlob = await generateAsync({ type: "arraybuffer" });
+    return zipBlob;
+  }
+
+  private arrayBufferToBuffer = (arrayBuffer: ArrayBuffer): Buffer => {
+    return Buffer.from(arrayBuffer);
+  };
+
+  private bufferToArrayBuffer = (buffer: Buffer): ArrayBuffer => {
+    return buffer.buffer.slice(
+      buffer.byteOffset,
+      buffer.byteOffset + buffer.byteLength
+    );
+  };
+
   /**
    * Get Files
    */
-  //   @HttpCode(200)
-  //   @Get("/")
-  //   public async getFiles(
-  //     @HeaderParam("apikey") apikey: string,
-  //     @Res() res: Response
-  //   ) {
-  //     try {
-  //       if (false == (await this.checkAuth(apikey))) {
-  //         return res.status(401).json({
-  //           success: false,
-  //           error: "Unauthorized",
-  //         });
-  //       }
+  @HttpCode(200)
+  @Get("/:id")
+  public async getFiles(
+    @HeaderParam("apikey") apikey: string,
+    @Param("id") fileID: number,
+    @Res() res: Response
+  ) {
+    try {
+      if (false == (await this.checkAuth(apikey))) {
+        return res.status(401).json({
+          success: false,
+          error: "Unauthorized",
+        });
+      }
 
-  //       const result = await this.fileService.selectFiles();
-  //       return res.status(200).json({
-  //         success: true,
-  //         result,
-  //       });
-  //     } catch (e) {
-  //       logError(e);
-  //       return res.status(400).json({
-  //         success: false,
-  //         error: e,
-  //       });
-  //     }
-  //   }
+      if (fileID) {
+        const result = await this.fileService.getFile(fileID);
+        return res.status(200).send(result.Data);
+      }
+
+      return res.status(401).json({
+        success: false,
+        error: "",
+      });
+    } catch (e) {
+      logError(e);
+      return res.status(400).json({
+        success: false,
+        error: e,
+      });
+    }
+  }
 
   @HttpCode(200)
   @Post("/")
@@ -65,23 +90,12 @@ export class FileController extends BaseController {
     @UploadedFile("file") file: Express.Multer.File
   ) {
     try {
-      console.log("YUES");
       if (
         (await this.checkAuth(apikey)) &&
         (await this.tokenUtils.verifyToken<AuthTokenJWT>(authToken))
       ) {
-        const zip = new JSZip();
-        const content = await zip.loadAsync(file.buffer);
-        console.log("DATA", file);
-        if (!content.files["data"]) {
-          throw new Error("data file not found in the zip");
-        }
-
-        const dataFile = await content.files["data"].async("string");
-        const EncodedData = Buffer.from(dataFile, "base64").toString("utf-8");
-        console.log("EncodedData", EncodedData);
-        const fileObj: FileData = { EncodedData, UserID: 1 };
-        const result = await this.fileService.insertFile(fileObj);
+        const fileBuffer = Buffer.from(file.buffer);
+        const result = await this.fileService.insertFile(fileBuffer);
         return res.status(200).json({
           success: true,
           result,

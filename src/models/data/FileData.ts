@@ -2,6 +2,7 @@ import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { RowDataPacket } from "mysql2/promise";
 
 export class FileData {
+  @IsNotEmpty()
   @IsNumber()
   public UserID?: number;
 
@@ -9,8 +10,7 @@ export class FileData {
   public FileID?: number;
 
   @IsNotEmpty()
-  @IsString()
-  public EncodedData?: string;
+  public Data?: any;
 }
 
 export interface FileResponse extends FileData, RowDataPacket {}
