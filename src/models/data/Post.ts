@@ -31,6 +31,9 @@ export class Post {
   public Content?: string;
 
   @IsDateString()
+  public PostDate?: string;
+
+  @IsDateString()
   public CreatedDate?: string;
 
   @IsDateString()

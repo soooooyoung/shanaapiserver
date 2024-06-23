@@ -21,6 +21,7 @@ export class PostService {
         {
           PostType: data.PostType || 0,
           UserID: data.UserID,
+          PostDate: data.PostDate || "",
           Title: data.Title,
           TitleImage: data.TitleImage || "",
           Content: data.Content,
