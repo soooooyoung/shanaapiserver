@@ -21,10 +21,11 @@ export class PostService {
         {
           PostType: data.PostType || 0,
           UserID: data.UserID,
-          PostDate: data.PostDate || "",
+          PostTime: data.PostTime || "",
           Title: data.Title,
           TitleImage: data.TitleImage || "",
           Content: data.Content,
+          Published: data.Published,
         }
       );
       return result[0][0];
@@ -51,12 +52,12 @@ export class PostService {
     }
   };
 
-  public deletePost = async (postID: number) => {
+  public deletePost = async (PostID: number) => {
     try {
       let [result, fields] = await executeQuery<PostResponse[], Post>(
         "spPostDelete",
         {
-          PostID: postID,
+          PostID,
         }
       );
       return result[0][0];

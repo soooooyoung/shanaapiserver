@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDateString,
   IsNotEmpty,
   IsNumber,
@@ -31,13 +32,16 @@ export class Post {
   public Content?: string;
 
   @IsDateString()
-  public PostDate?: string;
+  public PostTime?: string;
 
   @IsDateString()
-  public CreatedDate?: string;
+  public CreatedTime?: string;
 
   @IsDateString()
-  public UpdatedDate?: string;
+  public UpdatedTime?: string;
+
+  @IsBoolean()
+  public Published?: boolean;
 }
 export class PostCreateParam extends Post {}
 

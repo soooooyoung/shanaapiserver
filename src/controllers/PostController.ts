@@ -14,6 +14,7 @@ import {
   UseAfter,
   UseBefore,
   HeaderParam,
+  Param,
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { PostService } from "../services/PostService";
@@ -131,21 +132,20 @@ export class PostController extends BaseController {
   }
 
   @HttpCode(200)
-  @Delete("/")
+  @Delete("/:id")
   public async deletePost(
     @Res() res: Response,
     @HeaderParam("apikey") apikey: string,
     @CookieParam("token") authToken: string,
-    @Body() data: PostDeleteParam
+    @Param("id") postID: number
   ) {
     try {
       if (
-        data.UserID &&
-        data.PostID &&
+        postID &&
         (await this.checkAuth(apikey)) &&
-        (await this.verifyToken(authToken, data.UserID))
+        (await this.tokenUtils.verifyToken<AuthTokenJWT>(authToken))
       ) {
-        const result = await this.postService.deletePost(data.PostID);
+        const result = await this.postService.deletePost(postID);
         return res.status(200).json({
           success: true,
           result,
