@@ -4,6 +4,7 @@ export type {
   PostDeleteParam,
   PostCreateParam,
   PostUpdateParam,
+  CategoryResponse,
 } from "./data/Post";
 export type { User, UserCreateParam, UserResponse } from "./data/User";
 export type { FileData, FileResponse } from "./data/FileData";

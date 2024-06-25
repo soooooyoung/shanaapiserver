@@ -1,5 +1,5 @@
 import { Service } from "typedi";
-import { Post, PostResponse } from "../models";
+import { Post, PostResponse, CategoryResponse } from "../models";
 import { executeQuery } from "../utils/database/QueryUtil";
 
 @Service()
@@ -7,6 +7,18 @@ export class PostService {
   public selectAllPosts = async () => {
     try {
       let [result, fields] = await executeQuery<PostResponse[]>("spPostList");
+
+      return result[0];
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  public selectAllCategories = async () => {
+    try {
+      let [result, fields] = await executeQuery<CategoryResponse[]>(
+        "spCategoryList"
+      );
 
       return result[0];
     } catch (e) {

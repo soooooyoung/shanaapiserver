@@ -9,7 +9,10 @@ import {
 import { RowDataPacket } from "mysql2/promise";
 
 export interface PostResponse extends Post, RowDataPacket {}
-
+export interface CategoryResponse extends RowDataPacket {
+  Name?: string;
+  CategoryID?: number;
+}
 export class Post {
   @IsNotEmpty()
   public UserID?: number;

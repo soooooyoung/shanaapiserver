@@ -62,6 +62,37 @@ export class PostController extends BaseController {
     }
   }
 
+  /**
+   * Get Categories
+   */
+  @HttpCode(200)
+  @Get("/")
+  public async getCategories(
+    @HeaderParam("apikey") apikey: string,
+    @Res() res: Response
+  ) {
+    try {
+      if (false == (await this.checkAuth(apikey))) {
+        return res.status(401).json({
+          success: false,
+          error: "Unauthorized",
+        });
+      }
+
+      const result = await this.postService.selectAllCategories();
+      return res.status(200).json({
+        success: true,
+        result,
+      });
+    } catch (e) {
+      logError(e);
+      return res.status(400).json({
+        success: false,
+        error: e,
+      });
+    }
+  }
+
   @HttpCode(200)
   @Post("/")
   public async createPost(
