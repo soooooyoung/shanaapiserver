@@ -13,7 +13,18 @@ export class PostService {
       throw e;
     }
   };
+  public selectPosts = async (offset: number, limit: number) => {
+    try {
+      let [result, fields] = await executeQuery<
+        PostResponse[],
+        { offset: number; limit: number }
+      >("spPostListPage", { offset, limit });
 
+      return result[0];
+    } catch (e) {
+      throw e;
+    }
+  };
   public selectAllCategories = async () => {
     try {
       let [result, fields] = await executeQuery<CategoryResponse[]>(

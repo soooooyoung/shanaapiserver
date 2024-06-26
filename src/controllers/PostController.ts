@@ -5,14 +5,11 @@ import {
   HttpCode,
   Get,
   Res,
-  HeaderParams,
   Post,
   Body,
   Put,
   Delete,
   CookieParam,
-  UseAfter,
-  UseBefore,
   HeaderParam,
   Param,
 } from "routing-controllers";
@@ -80,6 +77,38 @@ export class PostController extends BaseController {
       }
 
       const result = await this.postService.selectAllCategories();
+      return res.status(200).json({
+        success: true,
+        result,
+      });
+    } catch (e) {
+      logError(e);
+      return res.status(400).json({
+        success: false,
+        error: e,
+      });
+    }
+  }
+
+  /**
+   * Get Posts
+   */
+  @HttpCode(200)
+  @Post("/page")
+  public async getPosts(
+    @HeaderParam("apikey") apikey: string,
+    @Body() { offset = 0, limit = 2 }: { offset?: number; limit?: number },
+    @Res() res: Response
+  ) {
+    try {
+      if (false == (await this.checkAuth(apikey))) {
+        return res.status(401).json({
+          success: false,
+          error: "Unauthorized",
+        });
+      }
+
+      const result = await this.postService.selectPosts(offset, limit);
       return res.status(200).json({
         success: true,
         result,
