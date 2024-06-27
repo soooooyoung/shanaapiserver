@@ -64,7 +64,7 @@ export class PostController extends BaseController {
    * Get Categories
    */
   @HttpCode(200)
-  @Get("/")
+  @Get("/categories")
   public async getCategories(
     @HeaderParam("apikey") apikey: string,
     @Res() res: Response

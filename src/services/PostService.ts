@@ -1,6 +1,7 @@
 import { Service } from "typedi";
 import { Post, PostResponse, CategoryResponse, Mail } from "../models";
 import { executeQuery } from "../utils/database/QueryUtil";
+import { fromZonedTime } from "date-fns-tz";
 
 @Service()
 export class PostService {
@@ -44,7 +45,10 @@ export class PostService {
         {
           PostType: data.PostType || 0,
           UserID: data.UserID,
-          PostTime: data.PostTime || "",
+          CategoryID: data.UserID || 0,
+          PostTime:
+            data.PostTime ||
+            fromZonedTime(Date.now(), "Asia/Seoul").toISOString(),
           Title: data.Title,
           TitleImage: data.TitleImage || "",
           Content: data.Content,

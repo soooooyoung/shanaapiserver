@@ -9,7 +9,7 @@ import { logError, logInfo } from "./utils/Logger";
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  limit: 100,
+  limit: 10,
   standardHeaders: "draft-7",
   legacyHeaders: false,
 });

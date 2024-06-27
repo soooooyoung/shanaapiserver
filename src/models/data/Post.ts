@@ -20,6 +20,9 @@ export class Post {
   @IsNumber()
   public PostID?: number;
 
+  @IsNumber()
+  public CategoryID?: number;
+
   @MaxLength(1)
   public PostType?: number;
 
