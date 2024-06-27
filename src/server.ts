@@ -1,12 +1,18 @@
 import * as express from "express";
 import * as compression from "compression";
 import * as bodyParser from "body-parser";
-import * as multer from "multer";
+import { rateLimit } from "express-rate-limit";
 import { Container } from "typedi";
 import { useContainer, useExpressServer } from "routing-controllers";
 import { routingControllerOptions } from "./configs/RoutingConfig";
 import { logError, logInfo } from "./utils/Logger";
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+});
 export class ShanaServer {
   public PORT: number = Number(process.env.PORT) || 9000;
   private readonly app: express.Application;
@@ -48,5 +54,6 @@ export class ShanaServer {
         parameterLimit: 100000,
       })
     );
+    this.app.use(limiter);
   }
 }

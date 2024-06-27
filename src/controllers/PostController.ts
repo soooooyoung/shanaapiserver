@@ -17,6 +17,7 @@ import { BaseController } from "./BaseController";
 import { PostService } from "../services/PostService";
 import {
   AuthTokenJWT,
+  Mail,
   PostCreateParam,
   PostDeleteParam,
   PostUpdateParam,
@@ -112,6 +113,40 @@ export class PostController extends BaseController {
       return res.status(200).json({
         success: true,
         result,
+      });
+    } catch (e) {
+      logError(e);
+      return res.status(400).json({
+        success: false,
+        error: e,
+      });
+    }
+  }
+
+  @HttpCode(200)
+  @Post("/mail")
+  public async createMail(
+    @Res() res: Response,
+    @HeaderParam("apikey") apikey: string,
+    @Body() data: Mail
+  ) {
+    try {
+      if (
+        data.Email &&
+        data.Content &&
+        data.Name &&
+        (await this.checkAuth(apikey))
+      ) {
+        const result = await this.postService.insertMail(data);
+        return res.status(200).json({
+          success: true,
+          result,
+        });
+      }
+
+      return res.status(401).json({
+        success: false,
+        error: "Unauthorized",
       });
     } catch (e) {
       logError(e);

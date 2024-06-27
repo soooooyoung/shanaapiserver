@@ -1,4 +1,5 @@
 export type {
+  Mail,
   Post,
   PostResponse,
   PostDeleteParam,

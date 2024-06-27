@@ -56,3 +56,15 @@ export class PostUpdateParam extends Post {
   @IsNotEmpty()
   public PostID?: number;
 }
+
+export class Mail {
+  @IsNotEmpty()
+  @IsString()
+  public Name?: string;
+  @IsNotEmpty()
+  @IsString()
+  public Email?: string;
+  @IsNotEmpty()
+  @IsString()
+  public Content?: string;
+}

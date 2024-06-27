@@ -1,5 +1,5 @@
 import { Service } from "typedi";
-import { Post, PostResponse, CategoryResponse } from "../models";
+import { Post, PostResponse, CategoryResponse, Mail } from "../models";
 import { executeQuery } from "../utils/database/QueryUtil";
 
 @Service()
@@ -52,6 +52,22 @@ export class PostService {
         }
       );
       return result[0][0];
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  public insertMail = async (data: Mail) => {
+    try {
+      let [result, fields] = await executeQuery<PostResponse[], Mail>(
+        "spMailCreate",
+        {
+          Name: data.Name,
+          Email: data.Email,
+          Content: data.Content,
+        }
+      );
+      return result;
     } catch (e) {
       throw e;
     }
