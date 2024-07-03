@@ -9,7 +9,7 @@ import { logError, logInfo } from "./utils/Logger";
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  limit: 50,
+  limit: 100,
   standardHeaders: "draft-7",
   legacyHeaders: false,
 });
@@ -54,6 +54,6 @@ export class ShanaServer {
         parameterLimit: 100000,
       })
     );
-    this.app.use(limiter);
+    // this.app.use(limiter);
   }
 }

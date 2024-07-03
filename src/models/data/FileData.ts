@@ -9,8 +9,13 @@ export class FileData {
   @IsNumber()
   public FileID?: number;
 
-  @IsNotEmpty()
   public Data?: any;
+
+  @IsString()
+  public FileName?: string;
+
+  @IsString()
+  public Path?: string;
 }
 
 export interface FileResponse extends FileData, RowDataPacket {}

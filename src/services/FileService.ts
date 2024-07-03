@@ -28,6 +28,18 @@ export class FileService {
     }
   };
 
+  public insertPath = async (FileName: string, Path: string) => {
+    try {
+      let [result, fields] = await executeQuery<FileResponse[], FileData>(
+        "spFileInsertPath",
+        { UserID: 1, FileName, Path }
+      );
+      return result[0][0];
+    } catch (e) {
+      throw e;
+    }
+  };
+
   public deleteFile = async (FileID: number) => {
     try {
       let [result, fields] = await executeQuery<FileResponse[], FileData>(
@@ -37,6 +49,17 @@ export class FileService {
         }
       );
       return result[0][0];
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  public getFileListMusic = async () => {
+    try {
+      let [result, fields] = await executeQuery<FileResponse[]>(
+        "spFileListMusic"
+      );
+      return result[0];
     } catch (e) {
       throw e;
     }

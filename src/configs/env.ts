@@ -28,7 +28,6 @@ export const env = {
   },
   client: process.env.CLIENT,
   path: {
-    userImg: process.env.IMG_PATH_USER,
-    postImg: process.env.IMG_PATH_POST,
+    music: process.env.PATH_MUSIC,
   },
 };
