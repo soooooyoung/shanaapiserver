@@ -1,6 +1,15 @@
 import * as path from "path";
 
-import { PathLike, access, mkdir, writeFile, readFile } from "fs";
+import {
+  PathLike,
+  access,
+  mkdir,
+  writeFile,
+  readFile,
+  open,
+  fchmod,
+  constants,
+} from "fs";
 import { Response } from "express";
 import { Inject, Service } from "typedi";
 import {
@@ -33,6 +42,8 @@ export class FileController extends BaseController {
   private readFileAsync = promisify(readFile);
   private mkdirAsync = promisify(mkdir);
   private accessAsync = promisify(access);
+  private openAsync = promisify(open);
+  private fchmodAsync = promisify(fchmod);
 
   private checkDirAccess = async (path: PathLike) => {
     try {
@@ -161,12 +172,14 @@ export class FileController extends BaseController {
       }
 
       if (fileID) {
-        const uploadPath = path.resolve(`${env.path.music}`);
-        await this.checkDirAccess(uploadPath);
+        const uploadPath = path.resolve(`${env.path.music}`, `${fileID}.mp3`);
 
-        const result = await this.readFileAsync(
-          path.resolve(uploadPath, `${fileID}.mp3`)
-        );
+        if (false == (await this.checkDirAccess(uploadPath))) {
+          const fd = await this.openAsync(uploadPath, "r");
+          await this.fchmodAsync(fd, 0o777);
+        }
+
+        const result = await this.readFileAsync(uploadPath);
         return res.status(200).send(result);
       }
 
